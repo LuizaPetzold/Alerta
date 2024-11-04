@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 10px; /* Adiciona um pouco de padding */
+        }
+        .formulario, .mensagem {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px; /* Tamanho máximo */
+            transition: all 0.3s ease; /* Efeito suave ao exibir */
+        }
+        .formulario h2, .mensagem h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333; /* Cor do título */
+        }
+        .formulario label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formulario input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Para incluir padding e borda no tamanho total */
+        }
+        .formulario button {
+            background-color: #4CAF50; /* Verde */
+            color: white; /* Texto branco */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s; /* Efeito suave ao passar o mouse */
+        }
+        .formulario button:hover {
+            background-color: #45a049; /* Verde escuro ao passar o mouse */
+        }
+        .mensagem p {
+            text-align: center;
+            color: #555; /* Cor do texto da mensagem */
+            margin: 10px 0;
+            font-size: 1.1em; /* Tamanho da fonte */
+        }
+        .erro {
+            color: red; /* Cor para mensagens de erro */
+            margin-top: -10px; /* Para ajustar a posição da mensagem de erro */
+            margin-bottom: 10px; /* Espaço abaixo da mensagem de erro */
+            font-size: 0.9em; /* Tamanho da fonte para mensagem de erro */
+        }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 500px) {
+            .formulario, .mensagem {
+                padding: 15px; /* Menos padding em telas pequenas */
+            }
+            .formulario h2, .mensagem h2 {
+                font-size: 1.5em; /* Tamanho da fonte menor */
+            }
+            .formulario input, .formulario button {
+                padding: 8px; /* Menos padding nos inputs e botão */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="formulario" id="formulario">
+        <h2>Cadastro</h2>
+        <form id="meuFormulario">
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" name="nome" required>
+            <div class="erro" id="erroNome"></div>
+
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" name="cpf" required>
+            <div class="erro" id="erroCpf"></div>
+
+            <label for="numero">Número de telefone:</label>
+            <input type="text" id="numero" name="numero" required>
+            <div class="erro" id="erroNumero"></div>
+
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" name="endereco" required>
+            <div class="erro" id="erroEndereco"></div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <div class="erro" id="erroEmail"></div>
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+            <div class="erro" id="erroSenha"></div>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <div class="mensagem" id="mensagem" style="display: none;"> <!-- Mensagem oculta inicialmente -->
+        <h2>Obrigado!</h2>
+        <p>Em breve, um email será redirecionado com o código do cupom.</p>
+    </div>
+
+    <script>
+        // Função de validação
+        function validarFormulario() {
+            let valido = true;
+
+            // Limpar mensagens de erro
+            const erros = document.querySelectorAll('.erro');
+            erros.forEach(erro => erro.textContent = '');
+
+            // Validação do Nome
+            const nome = document.getElementById('nome').value.trim();
+            if (nome.length < 3) {
+                document.getElementById('erroNome').textContent = 'Nome deve ter pelo menos 3 caracteres.';
+                valido = false;
+            }
+
+            // Validação do CPF (Exemplo simples, pode ser melhorado)
+            const cpf = document.getElementById('cpf').value.trim();
+            if (cpf.length !== 11 || isNaN(cpf)) {
+                document.getElementById('erroCpf').textContent = 'CPF deve ter 11 dígitos numéricos.';
+                valido = false;
+            }
+
+            // Validação do Número
+            const numero = document.getElementById('numero').value.trim();
+            if (numero.length < 1) {
+                document.getElementById('erroNumero').textContent = 'O número é obrigatório.';
+                valido = false;
+            }
+
+            // Validação do Endereço
+            const endereco = document.getElementById('endereco').value.trim();
+            if (endereco.length < 5) {
+                document.getElementById('erroEndereco').textContent = 'Endereço deve ter pelo menos 5 caracteres.';
+                valido = false;
+            }
+
+            // Validação do Email
+            const email = document.getElementById('email').value.trim();
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex simples para email
+            if (!regexEmail.test(email)) {
+                document.getElementById('erroEmail').textContent = 'Email inválido.';
+                valido = false;
+            }
+
+            // Validação da Senha
+            const senha = document.getElementById('senha').value.trim();
+            if (senha.length < 6) {
+                document.getElementById('erroSenha').textContent = 'Senha deve ter pelo menos 6 caracteres.';
+                valido = false;
+            }
+
+            return valido;
+        }
+
+        // Adicionar um evento ao formulário
+        document.getElementById('meuFormulario').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            if (validarFormulario()) { // Se o formulário for válido
+                document.getElementById('formulario').style.display = 'none'; // Esconde o formulário
+                document.getElementById('mensagem').style.display = 'block'; // Exibe a mensagem
+            }
+        });
+    </script>
+
+</body>
+</html>
